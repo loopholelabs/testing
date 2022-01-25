@@ -8,7 +8,7 @@
 TestConn is a [Go](http://golang.org) library that creates a pair of TCP Connections (that satisfy the `net.Conn` interface) that are bound to one another. It is simply a helper package 
 designed to be used in testing and cleans up the listener after itself while watching for race conditions. 
 
-**This library requires Go1.76 or later.**
+**This library requires Go 1.17 or later.**
 
 ## Important note about releases and stability
 

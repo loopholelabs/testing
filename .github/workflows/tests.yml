@@ -36,3 +36,6 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+
+      - name: Test with Race Conditions
+        run: go test -race -v ./...

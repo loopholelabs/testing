@@ -1,4 +1,4 @@
-module github.com/loopholelabs/testconn
+module github.com/loopholelabs/testing
 
 go 1.17
 

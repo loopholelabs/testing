@@ -20,8 +20,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"net"
+	"os"
 	"runtime"
 	"testing"
+	"time"
 )
 
 func TestNew(t *testing.T) {
@@ -97,4 +99,29 @@ func TestNew(t *testing.T) {
 		assert.NoError(t, a2.Close())
 		assert.Equal(t, endRoutine-2, runtime.NumGoroutine())
 	})
+}
+
+func TestDeadlines(t *testing.T) {
+	c1, c2 := net.Pipe()
+	data := make([]byte, 2048)
+	read := make([]byte, 512)
+	rand.Read(data)
+	c1 = New(c1, 512)
+	c2 = New(c2, 512)
+
+	assert.NoError(t, c2.SetReadDeadline(time.Now().Add(time.Millisecond)))
+	n, err := c2.Read(read)
+	assert.Equal(t, 0, n)
+	assert.ErrorIs(t, err, os.ErrDeadlineExceeded)
+
+	assert.NoError(t, c2.SetReadDeadline(time.Time{}))
+	n, err = c1.Write(data)
+	assert.NoError(t, err)
+	assert.Equal(t, len(data), n)
+
+	n, err = c2.Read(read)
+	assert.NoError(t, err)
+	assert.Equal(t, len(read), n)
+	assert.Equal(t, data[:512], read)
+
 }

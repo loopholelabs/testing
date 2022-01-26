@@ -31,6 +31,8 @@ import (
 
 var _ net.Conn = (*Buffered)(nil)
 
+// Buffered is a buffered net.Conn that will continuously
+// read from the underlying connection in a separate goroutine
 type Buffered struct {
 	c    net.Conn
 	wg   sync.WaitGroup
@@ -40,6 +42,9 @@ type Buffered struct {
 	size int
 }
 
+// New creates a new Buffered net.Conn with a specified read size.
+// This size defines the maximum amount of data that will be read
+// at a time in the background.
 func New(c net.Conn, size int) (a *Buffered) {
 	a = &Buffered{
 		c:    c,
@@ -77,6 +82,8 @@ LOOP:
 	goto LOOP
 }
 
+// Read satisfies the io.Reader interface and allow safe
+// concurrent reads from the buffered connection
 func (a *Buffered) Read(b []byte) (int, error) {
 	a.cond.L.Lock()
 	defer a.cond.L.Unlock()
@@ -91,31 +98,46 @@ LOOP:
 	return a.buf.Read(b)
 }
 
+// Write satisfies the io.Writer interface and
+// transparently writes to the underlying net.Conn
 func (a *Buffered) Write(b []byte) (int, error) {
 	return a.c.Write(b)
 }
 
+// Close satisfies the io.Closer interface and
+// closes the underlying net.Conn as well as
+// stopping the background read goroutine
 func (a *Buffered) Close() error {
 	defer a.wg.Wait()
 	return a.c.Close()
 }
 
+// LocalAddr helps satisfy the net.Conn interface
+// and returns the local address of the underlying net.Conn
 func (a *Buffered) LocalAddr() net.Addr {
 	return a.c.LocalAddr()
 }
 
+// RemoteAddr helps satisfy the net.Conn interface
+// and returns the remote address of the underlying net.Conn
 func (a *Buffered) RemoteAddr() net.Addr {
 	return a.c.RemoteAddr()
 }
 
+// SetDeadline helps satisfy the net.Conn interface
+// and sets a deadline on the underlying net.Conn
 func (a *Buffered) SetDeadline(t time.Time) error {
 	return a.c.SetDeadline(t)
 }
 
+// SetReadDeadline helps satisfy the net.Conn interface
+// and sets a read deadline on the underlying net.Conn
 func (a *Buffered) SetReadDeadline(t time.Time) error {
 	return a.c.SetReadDeadline(t)
 }
 
+// SetWriteDeadline helps satisfy the net.Conn interface
+// and sets a write deadline on the underlying net.Conn
 func (a *Buffered) SetWriteDeadline(t time.Time) error {
 	return a.c.SetWriteDeadline(t)
 }

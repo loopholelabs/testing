@@ -20,7 +20,7 @@
 package pair
 
 import (
-	"github.com/loopholelabs/testconn/pkg/conn"
+	"github.com/loopholelabs/testing/conn"
 	"net"
 	"sync"
 )

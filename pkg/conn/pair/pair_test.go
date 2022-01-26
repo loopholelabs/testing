@@ -92,3 +92,27 @@ func TestNew(t *testing.T) {
 
 	assert.NoError(t, Cleanup(c1, c2))
 }
+
+func Example() {
+	data := make([]byte, 512)
+	rand.Read(data)
+
+	// Use the pair.New() function to get a
+	// new pair of connections
+	c1, c2, err := New()
+	if err != nil {
+		panic(err)
+	}
+
+	// c1 and c2 are real TCP connections that satisfy the `net.Conn` interface
+	_, err = c1.Write(data)
+	if err != nil {
+		panic(err)
+	}
+
+	read := make([]byte, 512)
+	_, err = c2.Read(read)
+	if err != nil {
+		panic(err)
+	}
+}

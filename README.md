@@ -1,12 +1,11 @@
-# TestConn
+# Testing
 
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Go Report Card](https://goreportcard.com/badge/github.com/loopholelabs/testconn)](https://goreportcard.com/report/github.com/loopholelabs/testconn)
-[![go-doc](https://godoc.org/github.com/loopholelabs/testconn?status.svg)](https://godoc.org/github.com/loopholelabs/testconn)
+[![Go Report Card](https://goreportcard.com/badge/github.com/loopholelabs/testing)](https://goreportcard.com/report/github.com/loopholelabs/testing)
+[![go-doc](https://godoc.org/github.com/loopholelabs/testing?status.svg)](https://godoc.org/github.com/loopholelabs/testing)
 
-TestConn is a [Go](http://golang.org) library that creates a pair of TCP Connections (that satisfy the `net.Conn` interface) that are bound to one another. It is simply a helper package 
-designed to be used in testing and cleans up the listener after itself while watching for race conditions. 
+Testing is a [Go](http://golang.org) library that holds many helper packages for testing various [Golang](http://golang.org) programs. 
 
 **This library requires Go 1.17 or later.**
 
@@ -18,49 +17,13 @@ is still considered experimental. Breaking changes of the library will _not_ tri
 new major release. The same is true for selected other new features explicitly marked as
 **EXPERIMENTAL** in CHANGELOG.md.
 
-## Usage
-
-```go
-package main 
-
-import (
-	"github.com/loopholelabs/testconn"
-	"math/rand"
-)
-
-func main() {
-	// Create a byte slice of random data
-	data := make([]byte, 512)
-	rand.Read(data)
-
-	// Use the testconn.New() function to get a 
-	// new pair of connections
-	c1, c2, err := testconn.New()
-	if err != nil {
-		panic(err)
-    }
-
-	// c1 and c2 are real TCP connections that satisfy the `net.Conn` interface
-	_, err = c1.Write(data)
-	if err != nil {
-		panic(err)
-	}
-
-	read := make([]byte, 512)
-	_, err = c2.Read(read)
-	if err != nil {
-		panic(err)
-	}
-}
-```
-
 ## License
 
-The TestConn project is available as open source under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+The Testing project is available as open source under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 
 ## Project Managed By:
 [![https://loopholelabs.io][LOOPHOLELABS]](https://loopholelabs.io)
 
-[GITREPO]: https://github.com/loopholelabs/testconn
+[GITREPO]: https://github.com/loopholelabs/testing
 [LOOPHOLELABS]: https://cdn.loopholelabs.io/loopholelabs/LoopholeLabsLogo.svg

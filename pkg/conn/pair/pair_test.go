@@ -14,7 +14,7 @@
 	limitations under the License.
 */
 
-package testconn
+package pair
 
 import (
 	"github.com/stretchr/testify/assert"

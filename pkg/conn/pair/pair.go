@@ -14,27 +14,23 @@
 	limitations under the License.
 */
 
-// Package testconn is a helper package used to create
-// a pair of TCP connections for testing networking logic
-package testconn
+// Package pair is used to create a pair of
+// established TCP connections for testing
+// networking logic
+package pair
 
 import (
+	"github.com/loopholelabs/testconn/pkg/conn"
 	"net"
 	"sync"
 )
-
-// network specifies that TCP connections will be created
-const network = "tcp"
-
-// listen specifies that the listener will bind to localhost on a random port
-const listen = "127.0.0.1:0"
 
 // New creates a pair of TCP connections that are bound to one another.
 //
 // It also cleans up the listener after itself so as not to interfere
 // with other tests
 func New() (net.Conn, net.Conn, error) {
-	listener, err := net.Listen(network, listen)
+	listener, err := net.Listen(conn.Network, conn.Listen)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -48,7 +48,7 @@ type Buffered struct {
 func New(c net.Conn, size int) (a *Buffered) {
 	a = &Buffered{
 		c:    c,
-		buf:  new(bytes.Buffer),
+		buf:  bytes.NewBuffer(make([]byte, 0, size)),
 		cond: sync.NewCond(new(sync.Mutex)),
 		size: size,
 	}
